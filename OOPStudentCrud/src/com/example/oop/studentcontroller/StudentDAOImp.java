@@ -10,6 +10,7 @@ import com.example.oop.studentdb.studentdb;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -42,12 +43,41 @@ public class StudentDAOImp implements studentDAO{
 
     @Override
     public void update(student students) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try{
+            Connection con = studentdb.getConnection();
+            String sql = "UPDATE students SET fname=?,course=?,fee=? WHERE id =?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, students.getFname());
+            ps.setString(2, students.getCourse());
+            ps.setInt(3, students.getFee());
+            ps.setInt(4, students.getId());
+            ps.executeUpdate();
+            
+            JOptionPane.showMessageDialog(null,"Update!");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null,"Error");
+        } catch (Exception ex) {
+            Logger.getLogger(StudentDAOImp.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
     public void delete(student students) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try{
+            Connection con = studentdb.getConnection();
+            String sql = "DELETE from students WHERE id=?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, students.getId());
+            ps.executeUpdate();
+            
+            JOptionPane.showMessageDialog(null,"Deleted");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null,"Error");
+        } catch (Exception ex) {
+            Logger.getLogger(StudentDAOImp.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
